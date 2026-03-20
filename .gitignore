@@ -3,4 +3,7 @@ out/
 *.iml
 *.xml
 *.dll
-
+*.exe
+*.out
+.ipynb_checkpoints/
+.vscode/

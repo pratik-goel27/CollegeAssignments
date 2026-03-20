@@ -1,7 +1,6 @@
 package Assign_2.Part1.Q7;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Scanner;
 
 public class Student {

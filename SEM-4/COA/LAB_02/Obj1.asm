@@ -1,0 +1,32 @@
+;MOV DX,0000H
+;MOV AX,0000H
+;MOV BX,0FFFEH
+;MOV CX,0003H
+;L2: ADD AX,BX
+ ;      JNC L1
+ ;      INC DX
+;L1: DEC CX
+ ;   JNZ L2
+;MOV [1004H],AX
+;MOV [1006H],DX
+MOV SI,1000H  
+MOV BX,[SI]   ;storing mutliplicand
+INC SI
+INC SI
+MOV CX,[SI]   ;storing multiplier
+XOR AX,AX
+XOR DX,DX
+
+L2: ADD AX,BX
+    JNC L1
+    INC DX
+L1: DEC CX
+    JNZ L2
+
+INC SI
+INC SI
+MOV [SI],AX
+INC SI
+INC SI
+MOV [SI],DX 
+HLT 

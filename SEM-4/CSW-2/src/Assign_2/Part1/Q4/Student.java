@@ -13,6 +13,14 @@ public class Student implements Comparable<Student>{
         this.totalMark = totalMark;
     }
 
+    public Student() {
+        super();
+    }
+
+    public void setRollNumber(int rollNumber) {
+        this.rollNumber = rollNumber;
+    }
+
     public String getName() {
         return name;
     }
@@ -48,8 +56,11 @@ public class Student implements Comparable<Student>{
             Student s = new Student(sc.next(),sc.nextInt(),sc.nextFloat());
             arr[i] = s;
         }
+
         System.out.println("Enter the Student details which is to be searched:- ");
-        Student s = new Student(sc.next(),sc.nextInt(),sc.nextFloat());
+        Student s = new Student();
+        int roll = sc.nextInt();
+        s.setRollNumber(roll);
         for(int i = 0; i < n; i++) {
             if(arr[i].compareTo(s) == 0) {
                 System.out.println("The specified Student "+arr[i].getName()+" is present in the list");

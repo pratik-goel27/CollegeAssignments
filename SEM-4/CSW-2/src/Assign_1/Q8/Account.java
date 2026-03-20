@@ -1,6 +1,6 @@
 package Assign_1.Q8;
 
-abstract public class Account {
+ public abstract class Account {
     private long accountNum;
     private double balance;
 
@@ -9,7 +9,7 @@ abstract public class Account {
         this.balance = balance;
     }
 
-    abstract public void deposit(double amount);
+     public abstract void deposit(double amount);
 
     abstract public void withdrawal(double amount);
 

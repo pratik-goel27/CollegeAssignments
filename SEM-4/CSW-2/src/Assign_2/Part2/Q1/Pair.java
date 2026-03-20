@@ -21,6 +21,10 @@ public class Pair<K,V> {
         this.value = value;
     }
 
+    public void setKey(int key) {
+        this.key = key;
+    }
+
     @Override
     public String toString() {
         return "Pair{" +

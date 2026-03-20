@@ -2,11 +2,11 @@
 #include <sstream>
 using namespace sf;
 
-// void updateBranches(int seed);
-// const int NUM_BRANCHES = 6;
-// sprite branches[NUM_BRANCHES];
-// enum class side{LEFT, RIGHT, NONE};
-// side branchPosition[NUM_BRANCHES];
+void updateBranches(int seed);
+const int NUM_BRANCHES = 6;
+Sprite branches[NUM_BRANCHES];
+enum class side{LEFT, RIGHT, NONE};
+side branchPosition[NUM_BRANCHES];
 
 int main() {
 	VideoMode vm(1920, 1080);
@@ -23,7 +23,7 @@ int main() {
 	spriteBackground.setPosition(0,0);
 	
 	
-	//CREATING TREE :-
+	//CREATING TREE :-i
 	Texture textureTree;
 	textureTree.loadFromFile("graphics/tree.png");
 	Sprite spriteTree;
@@ -66,7 +66,14 @@ int main() {
 	texturePlayer.loadFromFile("graphics/player.png");
 	Sprite spritePlayer;
 	spritePlayer.setTexture(texturePlayer);
-	spritePlayer.setPosition(580,650);
+	spritePlayer.setPosition(580,720);
+	
+	//GRAVE STONE :-
+	Texture textureRIP;
+	textureRIP.loadFromFile("graphics/rip.png");
+	Sprite spriteRIP;
+	spriteRIP.setTexture(textureRIP);
+	spriteRIP.setPosition(580,770);
 	
 	
 	//CRETING AXE :-
@@ -74,7 +81,18 @@ int main() {
 	textureAxe.loadFromFile("graphics/axe.png");
 	Sprite spriteAxe;
 	spriteAxe.setTexture(textureAxe);
-	spritePlayer.setPosition(600,730);
+	spriteAxe.setPosition(700,830);
+	
+	const float AXE_POSITION_LEFT = 700;
+	const float AXE_POSITION_RIGHT = 1075;
+	
+	
+	//CREATING LOG :-
+	Texture textureLog;
+	textureLog.loadFromFile("graphics/log.png");
+	Sprite spriteLog;
+	spriteLog.setTexture(textureLog);
+	spriteLog.setPosition(810, 720);
 	
 	Clock clock;
 	// TIME BAR :-
@@ -88,10 +106,13 @@ int main() {
 	float timeRemaining = 6.0f;
 	float timeBarWidthPerSecond = timeBarStartWidth / timeRemaining;
 	
-	
+	//PAUSE VARIABLE :-
 	bool paused = true;
 	
+	//SCORE VARIABLE :-
 	int score = 0;
+	
+	//TEXT OBJECT :-
 	Text messageText;
 	Text scoreText;
 	
@@ -105,7 +126,6 @@ int main() {
 	scoreText.setCharacterSize(100);
 	messageText.setFillColor(Color::White);
 	scoreText.setFillColor(Color::White);
-	
 	FloatRect textRect = messageText.getLocalBounds();
 	messageText.setOrigin(textRect.left + textRect.width/2.0f, textRect.top + textRect.height / 2.0f);
 	messageText.setPosition(1920/2.0f, 1080/2.0f);
@@ -114,6 +134,18 @@ int main() {
 	//PREPARE 6 BRANCHES :-
 	Texture textureBranch;
 	textureBranch.loadFromFile("graphics/branch.png");
+	for(int i = 0; i < NUM_BRANCHES; i++) {
+		branches[i].setTexture(textureBranch);
+		branches[i].setPosition(-2000,-2000);
+		branches[i].setOrigin(220,40);
+	}
+	
+	
+	bool logActive = false;
+	float logSpeedX = 1000;
+	float logSpeedY = -1500;
+	
+	
 	
 	while(window.isOpen()) {
 		Event event;
@@ -189,7 +221,7 @@ int main() {
 				spriteCloud2.setPosition(-300, height);
 				cloud2Active = true;
 			}else {
-				//move cloud 2 :-
+				//move cloud 2 :-toffe share
 				spriteCloud2.setPosition(spriteCloud2.getPosition().x + (cloud2Speed*dt.asSeconds()), spriteCloud2.getPosition().y);
 				if(spriteCloud2.getPosition().x > 1920) {
 					cloud2Active = false;
@@ -216,6 +248,21 @@ int main() {
 			std::stringstream ss;
 			ss<<"Score = "<<score;
 			scoreText.setString(ss.str());
+			
+			for(int i = 0; i < NUM_BRANCHES; i++) {
+				float height = i * 150;
+				if(branchPosition[i] == side::LEFT) {
+					branches[i].setPosition(610, height);  
+					branches[i].setRotation(180);
+				}else if(branchPosition[i] == side::RIGHT) {
+					branches[i].setPosition(1310, height);
+					branches[i].setRotation(0);
+				}else {
+					branches[i].setPosition(3000, height);
+				}
+			}
+			
+			
 			//end of if(!pause) block.
 		}
 		
@@ -225,15 +272,38 @@ int main() {
 		window.draw(spriteCloud1);
 		window.draw(spriteCloud2);
 		window.draw(spriteCloud3);
+		for(int i = 0; i < NUM_BRANCHES; i++) {
+			window.draw(branches[i]);
+		}
 		window.draw(spriteTree);
 		window.draw(spriteBee);
 		window.draw(scoreText);
 		if(paused) window.draw(messageText);
 		window.draw(timeBar);
-
+		
 		window.draw(spritePlayer);
+		//window.draw(spriteRIP);
 		window.draw(spriteAxe);
+		window.draw(spriteLog);
 		window.display();
+		
 	}
-	return 0;
+}
+
+void updateBranches(int seed) {
+	for(int j = NUM_BRANCHES-1; j > 0; j--) {
+		branchPosition[j] = branchPosition[j-1];
+	}
+	srand((int)time(0) + seed);
+	int r = (rand()%5);
+	switch(r) {
+		case 0:
+			branchPosition[0] = side::LEFT;
+			break;
+		case 1:
+			branchPosition[0] = side::RIGHT;
+			break;
+		default:
+			branchPosition[0] = side::NONE;
+	}
 }

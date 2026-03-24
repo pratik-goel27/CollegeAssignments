@@ -5,6 +5,8 @@ using namespace sf;
 void updateBranches(int seed);
 const int NUM_BRANCHES = 6;
 Sprite branches[NUM_BRANCHES];
+// Where is the player/branch?
+// Left or Right
 enum class side{LEFT, RIGHT, NONE};
 side branchPosition[NUM_BRANCHES];
 
@@ -23,7 +25,7 @@ int main() {
 	spriteBackground.setPosition(0,0);
 	
 	
-	//CREATING TREE :-i
+	//CREATING TREE :-
 	Texture textureTree;
 	textureTree.loadFromFile("graphics/tree.png");
 	Sprite spriteTree;
@@ -82,7 +84,6 @@ int main() {
 	Sprite spriteAxe;
 	spriteAxe.setTexture(textureAxe);
 	spriteAxe.setPosition(700,830);
-	
 	const float AXE_POSITION_LEFT = 700;
 	const float AXE_POSITION_RIGHT = 1075;
 	
@@ -93,8 +94,12 @@ int main() {
 	Sprite spriteLog;
 	spriteLog.setTexture(textureLog);
 	spriteLog.setPosition(810, 720);
+	bool logActive = false;
+	float logSpeedX = 1000;
+	float logSpeedY = -1500;
 	
 	Clock clock;
+	
 	// TIME BAR :-
 	RectangleShape timeBar;
 	float timeBarStartWidth = 400;
@@ -106,7 +111,7 @@ int main() {
 	float timeRemaining = 6.0f;
 	float timeBarWidthPerSecond = timeBarStartWidth / timeRemaining;
 	
-	//PAUSE VARIABLE :-
+	//Track whether the game is running :-
 	bool paused = true;
 	
 	//SCORE VARIABLE :-
@@ -126,6 +131,7 @@ int main() {
 	scoreText.setCharacterSize(100);
 	messageText.setFillColor(Color::White);
 	scoreText.setFillColor(Color::White);
+	// Position the text :-
 	FloatRect textRect = messageText.getLocalBounds();
 	messageText.setOrigin(textRect.left + textRect.width/2.0f, textRect.top + textRect.height / 2.0f);
 	messageText.setPosition(1920/2.0f, 1080/2.0f);
@@ -141,12 +147,7 @@ int main() {
 	}
 	
 	
-	bool logActive = false;
-	float logSpeedX = 1000;
-	float logSpeedY = -1500;
-	
-	
-	
+	//MAIN GAME LOOP :-
 	while(window.isOpen()) {
 		Event event;
 		while(window.pollEvent(event)) {
@@ -175,10 +176,8 @@ int main() {
 				FloatRect textRect = messageText.getLocalBounds();
 				messageText.setOrigin(textRect.left + textRect.width/2.0f, textRect.top + textRect.height / 2.0f);
 				messageText.setPosition(1920/2.0f, 1080/2.0f);
-				//timeRemaining = 6.0f;
-				//score = 0;
 			}
-			
+				
 			//BEE Movement :-
 			if(!beeActive){
 				srand((int)time(0));//access the the current time
@@ -187,11 +186,11 @@ int main() {
 				float height=(rand()%500)+500;//to set the height 0-999
 				spriteBee.setPosition(2000,height); 
 				beeActive=true;
-			}else{
+			}else{	
 				//move bee
-				spriteBee.setPosition(spriteBee.getPosition().x - (beeSpeed*dt.asSeconds()),spriteBee.getPosition().y);
+				spriteBee.setPosition(spriteBee.getPosition().x - (beeSpeed*dt.asSeconds()), spriteBee.getPosition().y);
 				//to make bee to left again			
-				if(spriteBee.getPosition().x<-100){
+				if(spriteBee.getPosition().x < -100){
 					beeActive=false;
 				}
 			}
@@ -249,6 +248,7 @@ int main() {
 			ss<<"Score = "<<score;
 			scoreText.setString(ss.str());
 			
+			// update the branch sprites
 			for(int i = 0; i < NUM_BRANCHES; i++) {
 				float height = i * 150;
 				if(branchPosition[i] == side::LEFT) {
